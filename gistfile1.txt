@@ -1,0 +1,72 @@
+// ==UserScript==
+// @name         ⚕ℋҰ Extension
+// @description  ⚕ℋҰ
+// @version      4.0
+// @author       Koala/Acydwarp 
+// @match        http://agar.io/*
+// @match        https://agar.io/*
+// @run-at       document-start
+// @updateURL    https://agar.secureobscure.com/extension/purity.user.js
+// @downloadURL  https://agar.secureobscure.com/extension/purity.user.js
+// @grant        GM_xmlhttpRequest
+// ==/UserScript==
+ 
+// Clear out the window and stop processing other things
+window.stop();
+document.documentElement.innerHTML = null;
+ 
+// Get Acyds game.js token
+var token = null;
+GM_xmlhttpRequest({
+    method: "GET",
+    url: "http://extension.agarplus.io/game.js",
+    headers: {'Referer': 'http://agar.io/'},
+    onload: function(response) {
+        var regex = /'(eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9\.[a-zA-Z0-9_\-]*\.[a-zA-Z0-9_\-]*)'/;
+        token = response.responseText.match(regex)[1];
+        console.log('Got Token: ' + token);
+        // Request the agarplus webpage
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://extension.agarplus.io",
+            headers: {'Referer': 'http://agar.io/'},
+            onload: function(response) {
+                var content = response.responseText;
+                // Replace the response text script call to their game.js and pass the client token
+                content = content.replace("http://extension.agarplus.io/game.js",
+                    "https://agar.secureobscure.com/patch/?pelletcolor=7401DF&mapoutline=FFFFFF&minimapoutline=FFFFFF&token="+token);
+                document.open(), document.write(content), document.close();
+            }
+        });
+    }
+});
+ 
+// Continue loading with the live-modified script
+(function() {
+    function GM_wait() {
+        if (typeof unsafeWindow.jQuery == 'undefined')
+            window.setTimeout(GM_wait, 100);
+        else
+            unsafeWindow.jQuery(function() {
+                // Load the clan tag list, private server list, agar party list, etc.
+                $.getScript('https://agar.secureobscure.com/extension/')
+                    .done(function( script, textStatus ) {
+                    // make ID happy
+                    $("h2.extTitle").replaceWith('<h2 class="extTitle">⚕ℋҰ</h2>');
+                    // put me on top of every leaderboard
+                    $("span.leaderboard-title").replaceWith('<span class="leaderboard-title">⚕ℋҰ</span>');
+                    // wait for all the ajaxery to be done and then clean up the team name list for IÐ✺
+                    $( document ).ajaxStop(function() {
+                        // Empty out the team list and set it to whatever IÐ✺ wants
+                        $('#teamNameList').empty();
+                        // Add ID thingy and the HK team tags
+                        $('#teamNameList').append($('<option>').text('⚕ℋҰ').attr('value', '⚕ℋҰ'));
+                        $('#teamNameList').append($('<option>').text('¡ℍ¥ℱ|').attr('value', '¡ℍ¥ℱ|'));
+                        
+
+                    });
+                });
+            });
+    }
+    GM_wait();
+})();I
