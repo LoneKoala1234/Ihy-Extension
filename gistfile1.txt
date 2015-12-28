@@ -6,7 +6,7 @@
 // @match        http://agar.io/*
 // @match        https://agar.io/*
 // @run-at       document-start
-// @updateURL    https://gist.github.com/LoneKoala1234/8c51c80e087aa050b840s
+// @updateURL    https://gist.github.com/LoneKoala1234/8c51c80e087aa050b840
 // @downloadURL  https://gist.github.com/LoneKoala1234/8c51c80e087aa050b840
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
